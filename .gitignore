@@ -62,4 +62,4 @@ Thumbs.db
 *.pem
 /application.properties
 /application.yml
-/.env
+.env
