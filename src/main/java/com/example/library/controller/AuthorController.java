@@ -28,28 +28,21 @@ public class AuthorController {
 
     @GetMapping("/{id}")
     Author findById(@PathVariable int id){
-        LibraryValidation.existIdAuthorCheck(authorService.findAll(),id);
         return authorService.findById(id);
     }
 
     @PostMapping("/")
     Author save(@RequestBody Author author){
-        LibraryValidation.checkAuthorPayload(author);
-        LibraryValidation.existAuthorNameCheck(authorService.findAll(),author.getFirstName(), author.getLastName());
         return authorService.save(author);
     }
 
     @DeleteMapping("/{id}")
     void delete(@PathVariable int id){
-        LibraryValidation.existIdAuthorCheck(authorService.findAll(),id);
-        Author deletingAuthor= authorService.findById(id);
-        authorService.delete(deletingAuthor);
+        authorService.delete(id);
     }
 
     @PutMapping("/{id}")
     Author update(@PathVariable int id, @RequestBody Author author){
-        LibraryValidation.existIdAuthorCheck(authorService.findAll(),id);
-        LibraryValidation.checkAuthorPayload(author);
         return authorService.update(id, author);
     }
 

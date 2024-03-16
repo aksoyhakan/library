@@ -25,28 +25,21 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     Category findById(@PathVariable int id){
-        LibraryValidation.existIdCategoryCheck(categoryService.findAll(),id);
         return categoryService.findById(id);
     }
 
     @PostMapping("/")
     Category save(@RequestBody Category category){
-        LibraryValidation.checkCategoryPayload(category);
-        LibraryValidation.existCategoryNameCheck(categoryService.findAll(),category.getName());
         return categoryService.save(category);
     }
 
     @DeleteMapping("/{id}")
     void delete(@PathVariable int id){
-        LibraryValidation.existIdCategoryCheck(categoryService.findAll(),id);
-        Category deletingCategory=categoryService.findById(id);
-        categoryService.delete(deletingCategory);
+        categoryService.delete(id);
     }
 
     @PutMapping("/{id}")
     Category update(@PathVariable int id, @RequestBody Category category){
-        LibraryValidation.existIdCategoryCheck(categoryService.findAll(),id);
-        LibraryValidation.checkCategoryPayload(category);
         return categoryService.update(id, category);
     }
 }

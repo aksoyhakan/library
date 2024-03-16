@@ -10,7 +10,7 @@ public interface BookService {
     List<Book> findAll();
     Book findById(int id);
     Book save(Book book);
-    void delete(Book book);
+    void delete(int id);
     Book update(int id, Book book);
     Book addCategory(int categoryId, Book book);
     Book addCategoryAuthor(int categoryId, int authorId, Book book);
