@@ -2,6 +2,7 @@ package com.example.library.controller;
 
 import com.example.library.entity.Book;
 import com.example.library.exception.LibraryValidation;
+import com.example.library.mapping.BookReturn;
 import com.example.library.service.AuthorService;
 import com.example.library.service.BookService;
 import com.example.library.service.CategoryService;
@@ -22,18 +23,17 @@ public class BookController {
     }
 
     @GetMapping("/")
-    List<Book> findAll(){
+    List<BookReturn> findAll(){
         return bookService.findAll();
     }
 
-    @GetMapping("/id")
-    Book findById(int id){
-
+    @GetMapping("/{id}")
+    BookReturn findById(@PathVariable int id){
         return bookService.findById(id);
     }
 
     @PostMapping("/")
-    Book save(@RequestBody Book book){
+    BookReturn save(@RequestBody Book book){
         return bookService.save(book);
     }
 
@@ -43,17 +43,17 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    Book update(@PathVariable int id, @RequestBody Book book){
+    BookReturn update(@PathVariable int id, @RequestBody Book book){
         return bookService.update(id,book);
     }
 
     @PostMapping("/{categoryId}")
-    Book addCategory(@PathVariable int categoryId, @RequestBody Book book){
+    BookReturn addCategory(@PathVariable int categoryId, @RequestBody Book book){
         return bookService.addCategory(categoryId,book);
     }
 
     @PostMapping("/{categoryId}/{authorId}")
-    Book addCategory(@PathVariable int categoryId, @PathVariable int authorId, @RequestBody Book book){
+    BookReturn addCategory(@PathVariable int categoryId, @PathVariable int authorId, @RequestBody Book book){
         return bookService.addCategoryAuthor(categoryId,authorId,book);
     }
 }

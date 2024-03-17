@@ -4,9 +4,11 @@ import com.example.library.entity.Author;
 import com.example.library.entity.Book;
 import com.example.library.entity.Category;
 import com.example.library.exception.LibraryValidation;
+import com.example.library.mapping.BookReturn;
 import com.example.library.repository.AuthorRepository;
 import com.example.library.repository.BookRepository;
 import com.example.library.repository.CategoryRepository;
+import com.example.library.utils.BookUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,21 +28,21 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public List<Book> findAll() {
-        return bookRepository.findAll();
+    public List<BookReturn> findAll() {
+        return bookRepository.findAll().stream().map(book->BookUtil.constructBookResponse(book)).toList();
     }
 
     @Override
-    public Book findById(int id) {
+    public BookReturn findById(int id) {
         LibraryValidation.existIdBookCheck(bookRepository.findAll(),id);
-        return bookRepository.findById(id).orElseThrow();
+        return BookUtil.constructBookResponse(bookRepository.findById(id).orElseThrow()) ;
     }
 
     @Override
-    public Book save(Book book) {
+    public BookReturn save(Book book) {
         LibraryValidation.checkBookPayload(book);
         LibraryValidation.existBookNameCheck(bookRepository.findAll(),book.getName());
-        return bookRepository.save(book);
+        return BookUtil.constructBookResponse(bookRepository.save(book));
     }
 
     @Override
@@ -51,19 +53,19 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public Book update(int id, Book book) {
+    public BookReturn update(int id, Book book) {
         LibraryValidation.existIdBookCheck(bookRepository.findAll(),id);
         LibraryValidation.checkBookPayload(book);
-        return bookRepository.findById(id).map(item->{
+        return BookUtil.constructBookResponse(bookRepository.findById(id).map(item->{
             item.setName(book.getName());
             item.setAuthor(book.getAuthor());
             item.setCategory(book.getCategory());
             return bookRepository.save(item);
-        }).orElseThrow();
+        }).orElseThrow());
     }
 
     @Override
-    public Book addCategory(int categoryId, Book book) {
+    public BookReturn addCategory(int categoryId, Book book) {
         LibraryValidation.existIdCategoryCheck(categoryRepository.findAll(),categoryId);
         LibraryValidation.checkBookPayload(book);
         Category searchedCategory=categoryRepository.findById(categoryId).orElseThrow();
@@ -71,11 +73,11 @@ public class BookServiceImpl implements BookService{
         books.add(book);
         searchedCategory.setBook(books);
         book.setCategory(searchedCategory);
-        return bookRepository.save(book);
+        return BookUtil.constructBookResponse(bookRepository.save(book)) ;
     }
 
     @Override
-    public Book addCategoryAuthor(int categoryId, int authorId, Book book) {
+    public BookReturn addCategoryAuthor(int categoryId, int authorId, Book book) {
         LibraryValidation.existIdCategoryCheck(categoryRepository.findAll(),categoryId);
         LibraryValidation.existIdAuthorCheck(authorRepository.findAll(),authorId);
         LibraryValidation.checkBookPayload(book);
@@ -87,6 +89,6 @@ public class BookServiceImpl implements BookService{
         booksAuthor.add(book);
         book.setCategory(searchedCategory);
         book.setAuthor(searchedAuthor);
-        return bookRepository.save(book);
+        return BookUtil.constructBookResponse(bookRepository.save(book)) ;
     }
 }
