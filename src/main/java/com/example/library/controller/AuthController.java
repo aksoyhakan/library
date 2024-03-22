@@ -1,6 +1,8 @@
 package com.example.library.controller;
 
 
+import com.example.library.mapping.LoginRequest;
+import com.example.library.mapping.LoginResponse;
 import com.example.library.mapping.RegistrationUser;
 import com.example.library.service.AuthenticationService;
 import com.example.library.user.ApplicationUser;
@@ -25,5 +27,10 @@ public class AuthController {
     public ApplicationUser register(@RequestBody RegistrationUser user){
         return  authenticationService.register(user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword());
 
+    }
+
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody LoginRequest loginRequest){
+        return  authenticationService.login(loginRequest.getEmail(), loginRequest.getPassword());
     }
 }
